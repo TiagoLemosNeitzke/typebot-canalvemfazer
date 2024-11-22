@@ -32,7 +32,7 @@ import { i18n } from "../translate/i18n";
 import toastError from "../errors/toastError";
 import AnnouncementsPopover from "../components/AnnouncementsPopover";
 
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import { socketConnection } from "../services/socket";
 import ChatPopover from "../pages/Chat/ChatPopover";
 
@@ -163,9 +163,10 @@ const useStyles = makeStyles((theme) => ({
     // color: theme.barraSuperior.secondary.main,
   },
   logo: {
-    width: "80%",
+    width: "50%",
     height: "auto",
     maxWidth: 180,
+    marginLeft: 12,
     [theme.breakpoints.down("sm")]: {
       width: "auto",
       height: "80%",
