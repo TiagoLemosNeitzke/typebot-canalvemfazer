@@ -25,38 +25,51 @@ import checkoutFormModel from "./FormModel/checkoutFormModel";
 import formInitialValues from "./FormModel/formInitialValues";
 
 import useStyles from "./styles";
-import Invoices from "../../pages/Financeiro";
+import CreditCardForm from "./Forms/CreditCardForm";
 
 
 export default function CheckoutPage(props) {
-  const steps = ["Dados", "Personalizar", "Revisar"];
+  const steps = ["Dados do assinante", "Dados de pagamento", "Dados do plano", "Revisar"];
   const { formId, formField } = checkoutFormModel;
-  
-  
-  
+
+
+
   const classes = useStyles();
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
   const [datePayment, setDatePayment] = useState(null);
   const [invoiceId, setinvoiceId] = useState(props.Invoice.id);
   const currentValidationSchema = validationSchema[activeStep];
-  const isLastStep = activeStep === steps.length - 1;
+  const isLastStep = activeStep === steps.length -1;
   const { user } = useContext(AuthContext);
 
 function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
-
+  console.log(step,isLastStep)
   switch (step) {
     case 0:
       return <AddressForm formField={formField} values={values} setFieldValue={setFieldValue}  />;
     case 1:
-      return <PaymentForm 
-      formField={formField} 
-      setFieldValue={setFieldValue} 
-      setActiveStep={setActiveStep} 
-      activeStep={step} 
+      return (
+          <CreditCardForm
+              formField={{
+                cardHolderNameField: { name: "nameOnCard", label: "Nome no Cartão" },
+                cardNumberField: { name: "cardNumber", label: "Número do Cartão" },
+                expirationDateField: { name: "expirationDate", label: "Data de Validade" },
+                cvvField: { name: "cvv", label: "CVV" },
+              }}
+              setFieldValue={setFieldValue} // Isso deve ser a função que você usa para atualizar os valores do formulário
+          />
+      );
+
+    case 2:
+      return <PaymentForm
+      formField={formField}
+      setFieldValue={setFieldValue}
+      setActiveStep={setActiveStep}
+      activeStep={step}
       invoiceId={invoiceId}
       values={values}
       />;
-    case 2:
+    case 3:
       return <ReviewOrder />;
     default:
       return <div>Not Found</div>;
@@ -79,14 +92,15 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
         nameOnCard: values.nameOnCard,
         cardNumber: values.cardNumber,
         cvv: values.cvv,
+        expirationDate: values.expirationDate,
         plan: values.plan,
         price: plan.price,
         users: plan.users,
         connections: plan.connections,
         invoiceId: invoiceId
       }
-
-      const { data } = await api.post("/subscription", newValues);
+console.log(newValues)
+      const { data } = await api.post("/asaas", newValues);
       setDatePayment(data)
       actions.setSubmitting(false);
       setActiveStep(activeStep + 1);
@@ -128,7 +142,7 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
         ) : (
           <Formik
             initialValues={{
-              ...user, 
+              ...user,
               ...formInitialValues
             }}
             validationSchema={currentValidationSchema}
@@ -145,7 +159,7 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
                     </Button>
                   )}
                   <div className={classes.wrapper}>
-                    {activeStep !== 1 && (
+
                       <Button
                         disabled={isSubmitting}
                         type="submit"
@@ -155,7 +169,7 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
                       >
                         {isLastStep ? "PAGAR" : "PRÓXIMO"}
                       </Button>
-                    )}
+
                     {isSubmitting && (
                       <CircularProgress
                         size={24}

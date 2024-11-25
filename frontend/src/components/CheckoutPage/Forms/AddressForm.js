@@ -8,10 +8,6 @@ const countries = [
     value: "BR",
     label: "Brasil",
   },
-  {
-    value: "usa",
-    label: "United States",
-  },
 ];
 
 export default function AddressForm(props) {
