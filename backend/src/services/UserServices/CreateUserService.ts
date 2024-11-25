@@ -62,7 +62,7 @@ const CreateUserService = async ({
       .required()
       .test(
         "Check-email",
-        "An user with this email already exists.",
+        "Credenciais inválidas. Tente com um email ou senha diferente.",
         async value => {
           if (!value) return false;
           const emailExists = await User.findOne({

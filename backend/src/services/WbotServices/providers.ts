@@ -206,10 +206,10 @@ export const provider = async (ticket: Ticket, msg: proto.IWebMessageInfo, compa
 
 
                         if (bloqueado === 'sim') {
-                          const bodyBloqueio = { text: formatBody(`${nome} vi tambem que a sua conexão esta bloqueada! Vou desbloquear para você por *48 horas*.`, contact) };
+                          const bodyBloqueio = { text: formatBody(`${nome} vi também que a sua conexão está bloqueada! Vou desbloquear para você por *48 horas*.`, contact) };
                           await sleep(2000)
                           await wbot.sendMessage(`${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`, bodyBloqueio);
-                          const bodyqrcode = { text: formatBody(`Estou liberando seu acesso. Por favor aguarde!`, contact) };
+                          const bodyqrcode = { text: formatBody(`Estou liberando seu acesso. Por favor, aguarde!`, contact) };
                           await sleep(2000)
                           await wbot.sendMessage(`${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`, bodyqrcode);
                           var optionsdesbloq = {
@@ -223,7 +223,7 @@ export const provider = async (ticket: Ticket, msg: proto.IWebMessageInfo, compa
                             const bodyLiberado = { text: formatBody(`Pronto liberei! Vou precisar que você *retire* seu equipamento da tomada.\n\n*OBS: Somente retire da tomada.* \nAguarde 1 minuto e ligue novamente!`, contact) };
                             await sleep(2000)
                             await wbot.sendMessage(`${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`, bodyLiberado);
-                            const bodyqrcode = { text: formatBody(`Veja se seu acesso voltou! Caso nao tenha voltado retorne o contato e fale com um atendente!`, contact) };
+                            const bodyqrcode = { text: formatBody(`Veja se seu acesso voltou! Caso não tenha voltado retorne o contato e fale com um atendente!`, contact) };
                             await sleep(2000)
                             await wbot.sendMessage(`${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`, bodyqrcode);
                           }).catch(async function (error) {
