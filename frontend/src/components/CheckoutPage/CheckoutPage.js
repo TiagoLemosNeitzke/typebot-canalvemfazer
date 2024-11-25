@@ -43,7 +43,7 @@ export default function CheckoutPage(props) {
   const { user } = useContext(AuthContext);
 
 function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
-  console.log(step,isLastStep)
+
   switch (step) {
     case 0:
       return <AddressForm formField={formField} values={values} setFieldValue={setFieldValue}  />;
@@ -51,7 +51,7 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
       return (
           <CreditCardForm
               formField={{
-                cardHolderNameField: { name: "nameOnCard", label: "Nome no Cartão" },
+                cardHolderNameField: { name: "cardHolderName", label: "Nome no Cartão" },
                 cardNumberField: { name: "cardNumber", label: "Número do Cartão" },
                 expirationDateField: { name: "expirationDate", label: "Data de Validade" },
                 cvvField: { name: "cvv", label: "CVV" },
@@ -81,6 +81,7 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
     try {
       const plan = JSON.parse(values.plan);
       const newValues = {
+        asaasCustomerId: user.assasCustomerId,
         firstName: values.firstName,
         lastName: values.lastName,
         address2: values.address2,
@@ -89,7 +90,7 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
         zipcode: values.zipcode,
         country: values.country,
         useAddressForPaymentDetails: values.useAddressForPaymentDetails,
-        nameOnCard: values.nameOnCard,
+        nameOnCard: values.cardHolderName,
         cardNumber: values.cardNumber,
         cvv: values.cvv,
         expirationDate: values.expirationDate,
@@ -99,8 +100,8 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
         connections: plan.connections,
         invoiceId: invoiceId
       }
-console.log(newValues)
-      const { data } = await api.post("/asaas", newValues);
+// console.log(newValues)
+      const { data } = await api.post("/subscription", newValues);
       setDatePayment(data)
       actions.setSubmitting(false);
       setActiveStep(activeStep + 1);
