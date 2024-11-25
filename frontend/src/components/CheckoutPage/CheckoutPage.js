@@ -81,7 +81,7 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
     try {
       const plan = JSON.parse(values.plan);
       const newValues = {
-        asaasCustomerId: user.assasCustomerId,
+        asaasCustomerId: user.asaasCustomerId,
         firstName: values.firstName,
         lastName: values.lastName,
         address2: values.address2,

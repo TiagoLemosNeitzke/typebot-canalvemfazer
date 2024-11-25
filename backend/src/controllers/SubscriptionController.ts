@@ -10,16 +10,24 @@ import Invoices from "../models/Invoices";
 import Subscriptions from "../models/Subscriptions";
 import { getIO } from "../libs/socket";
 import UpdateUserService from "../services/UserServices/UpdateUserService";
+import axios from "axios";
+import assasConfig from "../config/asaas";
 
 const app = express();
 
+const asaasApi = axios.create({
+  baseURL: assasConfig.asaas_url,
+  headers: {
+    Authorization: `Bearer ${assasConfig.assas_api_key}`,
+  },
+});
 
 export const index = async (req: Request, res: Response): Promise<Response> => {
   const gerencianet = Gerencianet(options);
   return res.json(gerencianet.getSubscriptions());
 };
 
-export const createSubscription = async (
+/*export const createSubscription = async (
   req: Request,
   res: Response
   ): Promise<Response> => {
@@ -74,7 +82,7 @@ export const createSubscription = async (
     }
 
 
-/*     await Subscriptions.create({
+/!*     await Subscriptions.create({
       companyId,
       isActive: false,
       userPriceCents: users,
@@ -83,19 +91,19 @@ export const createSubscription = async (
       lastPlanChange: new Date(),
       providerSubscriptionId: pix.loc.id,
       expiresAt: new Date()
-    }); */
+    }); *!/
 
-/*     const { id } = req.user;
+/!*     const { id } = req.user;
     const userData = {};
     const userId = id;
     const requestUserId = parseInt(id);
-    const user = await UpdateUserService({ userData, userId, companyId, requestUserId }); */
+    const user = await UpdateUserService({ userData, userId, companyId, requestUserId }); *!/
 
-    /*     const io = getIO();
+    /!*     const io = getIO();
         io.emit("user", {
           action: "update",
           user
-        }); */
+        }); *!/
 
 
     return res.json({
@@ -106,7 +114,68 @@ export const createSubscription = async (
   } catch (error) {
     throw new AppError("Validation fails", 400);
   }
+};*/
+
+/*Implementação asaas*/
+export const createSubscription = async (req: Request, res: Response): Promise<Response> => {
+/*
+*  body: {
+    firstName: 'Tiago Lemos Neitzke',
+    lastName: '',
+    address2: 'Rua Otávio Barbosa Vilar',
+    city: 'Fatima do Sul',
+    state: 'MS',
+    zipcode: '79700000',
+    country: 'BR',
+    useAddressForPaymentDetails: false,
+    nameOnCard: '',
+    cardNumber: '4444444444444444',
+    cvv: '123',
+    expirationDate: '12/25',
+    plan: '{"title":"Plano 1","planId":1,"price":30,"description":["10 Usuários","10 Conexão","10 Filas"],"users":10,"connections":10,"queues":10,"buttonText":"SELECIONAR","buttonVariant":"outlined"}',
+    price: 30,
+    users: 10,
+    connections: 10,
+    invoiceId: 1
+  },
+*/
+  const { companyId } = req.user;
+  const data = req.body
+console.log(data)
+  const schema = Yup.object().shape({
+    price: Yup.string().required(),
+    users: Yup.string().required(),
+    connections: Yup.string().required(),
+    // customerId: Yup.string().required() // Cliente cadastrado no Asaas
+  });
+
+  if (!(await schema.isValid(req.body))) {
+    throw new AppError("Validation fails 123", 400);
+  }
+
+  const { customerId, price, plan } = req.body;
+
+  const subscriptionData = {
+    customer: customerId,
+    billingType: "BOLETO", // ou PIX, depende do que você deseja usar
+    nextDueDate: new Date().toISOString().split("T")[0],
+    value: parseFloat(price),
+    cycle: "MONTHLY",
+    description: `Assinatura do plano ${plan}`
+  };
+
+  try {
+    const response = await asaasApi.post("/subscriptions", subscriptionData);
+
+    return res.json(response.data);
+  } catch (error) {
+    console.error("Erro ao criar assinatura no Asaas:", error.response?.data || error.message);
+    throw new AppError("Erro ao criar assinatura", 400);
+  }
 };
+
+
+/*fim implementação asaas*/
 
 export const createWebhook = async (
   req: Request,

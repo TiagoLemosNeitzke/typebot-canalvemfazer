@@ -56,6 +56,12 @@ class User extends Model<User> {
   @Column
   online: boolean;
 
+  @Column
+  asaasCustomerId: string;
+
+  @Column
+  asaasCardToken: string;
+
   @CreatedAt
   createdAt: Date;
 
