@@ -3,7 +3,7 @@ export default {
   formField: {
     firstName: {
       name: 'firstName',
-      label: 'Nome completo*',
+      label: 'Nome da Empresa*',
       requiredErrorMsg: 'O nome completo é obrigatório'
     },
     phone: {
@@ -11,8 +11,8 @@ export default {
       label: 'Telefone de contato',
       requiredErrorMsg: 'O campo é obrigatório'
     },
-    cpfCnpj: {
-      name: 'CnpfCnpjNumber',
+    cnpj: {
+      name: 'CnpjNumber',
       label: 'CPF/CNPJ',
       requiredErrorMsg: 'O campo é obrigatório'
     },

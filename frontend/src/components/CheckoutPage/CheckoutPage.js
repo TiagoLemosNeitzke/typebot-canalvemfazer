@@ -32,8 +32,6 @@ export default function CheckoutPage(props) {
   const steps = ["Dados do assinante", "Dados de pagamento", "Dados do plano", "Revisar"];
   const { formId, formField } = checkoutFormModel;
 
-
-
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [datePayment, setDatePayment] = useState(null);
@@ -83,7 +81,9 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
       const newValues = {
         asaasCustomerId: user.asaasCustomerId,
         firstName: values.firstName,
-        lastName: values.lastName,
+        companyName: values.companyName,
+        cnpj: values.cnpj,
+        phone: values.phone,
         address2: values.address2,
         city: values.city,
         state: values.state,
