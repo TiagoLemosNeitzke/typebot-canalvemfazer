@@ -3,12 +3,15 @@ import AppError from "../../errors/AppError";
 import Company from "../../models/Company";
 import User from "../../models/User";
 import Setting from "../../models/Setting";
+import * as asaasService from "../AsaasService/CustomerService";
 
 interface CompanyData {
   name: string;
   phone?: string;
   email?: string;
   password?: string;
+  cnpj?: string,
+  zipcode?: string,
   status?: boolean;
   planId?: number;
   campaignsEnabled?: boolean;
@@ -23,6 +26,8 @@ const CreateCompanyService = async (
     name,
     phone,
     email,
+    cnpj,
+    zipcode,
     status,
     planId,
     password,
@@ -67,14 +72,30 @@ const CreateCompanyService = async (
     recurrence
   });
 
+
   const user = await User.create({
     name: company.name,
     email: company.email,
+    cnpj: cnpj,
+    zipcode: zipcode,
     password: companyData.password,
     profile: "admin",
     companyId: company.id
   });
 
+  const data = {
+    name: company.name,
+    email: company.email,
+    mobilePhone: company.phone,
+    cpfCnpj: cnpj,
+    postalCode: zipcode,
+    externalReference: company.id,
+  };
+
+  //create assas id
+  const asaasCustomer = await asaasService.createCustomer(data)
+  //todo: preciso verificar o que retorna
+console.log(asaasCustomer)
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -204,7 +225,7 @@ const CreateCompanyService = async (
       value: "disabled"
     },
   });
-  
+
  // Enviar mensagem de transferencia
     await Setting.findOrCreate({
 	where:{
