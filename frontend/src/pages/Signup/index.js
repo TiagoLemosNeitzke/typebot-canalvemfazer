@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from "react";
 import qs from 'query-string'
-
 import * as Yup from "yup";
 import { useHistory } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Formik, Form, Field } from "formik";
 import usePlans from "../../hooks/usePlans";
-import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import InputMask from 'react-input-mask';
 import {
-	FormControl,
+	// FormControl,
 	InputLabel,
 	MenuItem,
 	Select,
 } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+// import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.svg";
 import { i18n } from "../../translate/i18n";
 
 import { openApi } from "../../services/api";
@@ -35,9 +34,9 @@ const Copyright = () => {
 		<Typography variant="body2" color="textSecondary" align="center">
 			{"Copyright © "}
 			<Link color="inherit" href="#">
-				AtendeChat
+				Chattnes
 			</Link>{" "}
-		   {new Date().getFullYear()}
+			{new Date().getFullYear()}
 			{"."}
 		</Typography>
 	);
@@ -65,11 +64,14 @@ const useStyles = makeStyles(theme => ({
 
 const UserSchema = Yup.object().shape({
 	name: Yup.string()
-		.min(2, "Too Short!")
-		.max(50, "Too Long!")
-		.required("Required"),
-	password: Yup.string().min(5, "Too Short!").max(50, "Too Long!"),
-	email: Yup.string().email("Invalid email").required("Required"),
+		.min(2, "Nome da empresa muito curto.")
+		.max(50, "Nome da empresa muito longo.")
+		.required("Campo Obrigatório."),
+	password: Yup.string().min(5, "Senha muito curta.").max(50, "Senha muito longa."),
+	email: Yup.string().email("E-mail inválido.").required("Campo Obrigatório."),
+	cnpj: Yup.string().required("Campo Obrigatório."),
+	cep: Yup.string().required("Campo Obrigatório."),
+	phone: Yup.string().required("Campo Obrigatório."),
 });
 
 const SignUp = () => {
@@ -149,9 +151,41 @@ const SignUp = () => {
 										fullWidth
 										id="name"
 										label="Nome da Empresa"
+										required
 									/>
 								</Grid>
-
+								<Grid item xs={12}>
+									<Field
+										as={TextField}
+										mask="99.999.999/9999-99"
+										autoComplete="CNPJ"
+										name="cnpj"
+										error={touched.cnpj && Boolean(errors.cnpj)}
+										helperText={touched.cnpj && errors.cnpj}
+										variant="outlined"
+										fullWidth
+										id="cnpj"
+										label="CNPJ"
+										required
+									>
+									</Field>
+								</Grid>
+								<Grid item xs={12}>
+									<Field
+										as={TextField}
+										mask="99999-999"
+										autoComplete="zipcode"
+										name="zipcode"
+										error={touched.cep && Boolean(errors.cep)}
+										helperText={touched.cep && errors.cep}
+										variant="outlined"
+										fullWidth
+										id="zipcode"
+										label="CEP"
+										required
+									>
+									</Field>
+								</Grid>
 								<Grid item xs={12}>
 									<Field
 										as={TextField}
@@ -166,7 +200,7 @@ const SignUp = () => {
 										required
 									/>
 								</Grid>
-								
+
 								<Grid item xs={12}>
 									<Field
 										as={TextField}
@@ -174,9 +208,10 @@ const SignUp = () => {
 										fullWidth
 										id="phone"
 										label="Telefone com (DDD)"
+										placeholder="teste"
 										name="phone"
-										error={touched.email && Boolean(errors.email)}
-										helperText={touched.email && errors.email}
+										error={touched.phone && Boolean(errors.phone)}
+										helperText={touched.phone && errors.phone}
 										autoComplete="phone"
 										required
 									/>
@@ -210,7 +245,8 @@ const SignUp = () => {
 									>
 										{plans.map((plan, key) => (
 											<MenuItem key={key} value={plan.id}>
-												{plan.name} - Atendentes: {plan.users} - WhatsApp: {plan.connections} - Filas: {plan.queues} - R$ {plan.value}
+												{plan.name} - Atendentes: {plan.users} - WhatsApp: {plan.connections} -
+												Filas: {plan.queues} - R$ {plan.value}
 											</MenuItem>
 										))}
 									</Field>
@@ -241,7 +277,7 @@ const SignUp = () => {
 					)}
 				</Formik>
 			</div>
-			<Box mt={5}>{/* <Copyright /> */}</Box>
+			<Box mt={4}><Copyright /></Box>
 		</Container>
 	);
 };
