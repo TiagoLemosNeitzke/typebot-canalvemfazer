@@ -12,9 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import InputMask from 'react-input-mask';
 import {
-	// FormControl,
 	InputLabel,
 	MenuItem,
 	Select,
@@ -70,7 +68,7 @@ const UserSchema = Yup.object().shape({
 	password: Yup.string().min(5, "Senha muito curta.").max(50, "Senha muito longa."),
 	email: Yup.string().email("E-mail inválido.").required("Campo Obrigatório."),
 	cnpj: Yup.string().required("Campo Obrigatório."),
-	cep: Yup.string().required("Campo Obrigatório."),
+	zipcode: Yup.string().min(8, "CEP Inválido.").max(9, "CEP Inválido.").required("Campo Obrigatório."),
 	phone: Yup.string().required("Campo Obrigatório."),
 });
 
@@ -84,11 +82,12 @@ const SignUp = () => {
 		companyId = params.companyId
 	}
 
-	const initialState = { name: "", email: "", phone: "", password: "", planId: "", };
+	const initialState = { name: "", email: "", phone: "", password: "", planId: "", cnpj: "", zipcode: "" };
 
 	const [user] = useState(initialState);
-	const dueDate = moment().add(1, "day").format();
+	const dueDate = moment().add(10, "day").format(); // Aqui dá o prazo de teste grátis
 	const handleSignUp = async values => {
+		console.log(values)
 		Object.assign(values, { recurrence: "MENSAL" });
 		Object.assign(values, { dueDate: dueDate });
 		Object.assign(values, { status: "t" });
@@ -113,7 +112,6 @@ const SignUp = () => {
 		}
 		fetchData();
 	}, []);
-
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -155,9 +153,9 @@ const SignUp = () => {
 									/>
 								</Grid>
 								<Grid item xs={12}>
+									{/*todo preciso formatar os campos*/}
 									<Field
 										as={TextField}
-										mask="99.999.999/9999-99"
 										autoComplete="CNPJ"
 										name="cnpj"
 										error={touched.cnpj && Boolean(errors.cnpj)}
@@ -173,11 +171,10 @@ const SignUp = () => {
 								<Grid item xs={12}>
 									<Field
 										as={TextField}
-										mask="99999-999"
 										autoComplete="zipcode"
 										name="zipcode"
-										error={touched.cep && Boolean(errors.cep)}
-										helperText={touched.cep && errors.cep}
+										error={touched.zipcode && Boolean(errors.zipcode)}
+										helperText={touched.zipcode && errors.zipcode}
 										variant="outlined"
 										fullWidth
 										id="zipcode"
