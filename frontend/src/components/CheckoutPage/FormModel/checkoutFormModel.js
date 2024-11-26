@@ -12,8 +12,8 @@ export default {
       requiredErrorMsg: 'O campo é obrigatório'
     },
     cnpj: {
-      name: 'CnpjNumber',
-      label: 'CPF/CNPJ',
+      name: 'cnpjNumber',
+      label: 'CNPJ*',
       requiredErrorMsg: 'O campo é obrigatório'
     },
     address1: {
@@ -21,7 +21,6 @@ export default {
       label: 'Endereço*',
       requiredErrorMsg: 'O Endereço é obrigatório'
     },
-
     city: {
       name: 'city',
       label: 'Cidade*',

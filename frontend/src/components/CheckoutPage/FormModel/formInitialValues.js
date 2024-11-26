@@ -4,6 +4,7 @@ const {
     formField: {
         firstName,
         address1,
+        cnpj,
         city,
         state,
         zipcode,
@@ -22,6 +23,7 @@ export default {
     [city.name]: '',
     [state.name]: '',
     [zipcode.name]: '',
+    [cnpj.name]: '',
     [country.name]: '',
     [useAddressForPaymentDetails.name]: false,
     [nameOnCard.name]: '',
