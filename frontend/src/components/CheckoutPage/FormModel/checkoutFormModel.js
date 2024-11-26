@@ -1,7 +1,7 @@
 export default {
   formId: 'checkoutForm',
   formField: {
-    firstName: {
+   /* firstName: {
       name: 'firstName',
       label: 'Nome da Empresa*',
       requiredErrorMsg: 'O nome completo é obrigatório'
@@ -10,13 +10,13 @@ export default {
       name: 'PhoneNumber',
       label: 'Telefone de contato',
       requiredErrorMsg: 'O campo é obrigatório'
-    },
+    },*/
     cnpj: {
-      name: 'cnpjNumber',
+      name: 'cnpj',
       label: 'CNPJ*',
-      requiredErrorMsg: 'O campo é obrigatório'
+      requiredErrorMsg: 'O CNPJ é obrigatório'
     },
-    address1: {
+   /* address1: {
       name: 'address2',
       label: 'Endereço*',
       requiredErrorMsg: 'O Endereço é obrigatório'
@@ -30,18 +30,18 @@ export default {
       name: 'state',
       label: 'Estado*',
       requiredErrorMsg: 'Cidade é obrigatória'
-    },
+    },*/
     zipcode: {
       name: 'zipcode',
       label: 'CEP*',
       requiredErrorMsg: 'CEP é obrigatório',
       invalidErrorMsg: 'Formato de CEP inválido'
     },
-    country: {
+   /* country: {
       name: 'country',
       label: 'País*',
       requiredErrorMsg: 'País é obrigatório'
-    },
+    },*/
     useAddressForPaymentDetails: {
       name: 'useAddressForPaymentDetails',
       label: 'Use this address for payment details'

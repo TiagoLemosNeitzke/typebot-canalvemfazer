@@ -2,13 +2,12 @@ import checkoutFormModel from './checkoutFormModel';
 
 const {
     formField: {
-        firstName,
-        address1,
+        // firstName,
+        // address1,
         cnpj,
-        city,
-        state,
-        zipcode,
-        country,
+        // city,
+        // state,
+        // country,
         useAddressForPaymentDetails,
         nameOnCard,
         cardNumber,
@@ -18,13 +17,12 @@ const {
 } = checkoutFormModel;
 
 export default {
-    [firstName.name]: '',
-    [address1.name]: '',
-    [city.name]: '',
-    [state.name]: '',
-    [zipcode.name]: '',
+    // [firstName.name]: '',
+    // [address1.name]: '',
+    // [city.name]: '',
+    // [state.name]: '',
     [cnpj.name]: '',
-    [country.name]: '',
+    // [country.name]: '',
     [useAddressForPaymentDetails.name]: false,
     [nameOnCard.name]: '',
     [cardNumber.name]: '',

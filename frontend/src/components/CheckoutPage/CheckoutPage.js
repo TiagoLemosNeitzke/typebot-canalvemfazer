@@ -41,7 +41,7 @@ export default function CheckoutPage(props) {
   const { user } = useContext(AuthContext);
 
 function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
-
+  console.log(step)
   switch (step) {
     case 0:
       return <AddressForm formField={formField} values={values} setFieldValue={setFieldValue}  />;
@@ -79,16 +79,16 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
     try {
       const plan = JSON.parse(values.plan);
       const newValues = {
-        asaasCustomerId: user.asaasCustomerId,
-        firstName: values.firstName,
-        companyName: values.companyName,
+        userId: user.id,
+        // firstName: values.firstName,
+        // companyName: values.companyName,
         cnpj: values.cnpj,
         phone: values.phone,
-        address2: values.address2,
-        city: values.city,
-        state: values.state,
+        // address2: values.address2,
+        // city: values.city,
+        // state: values.state,
         zipcode: values.zipcode,
-        country: values.country,
+        // country: values.country,
         useAddressForPaymentDetails: values.useAddressForPaymentDetails,
         nameOnCard: values.cardHolderName,
         cardNumber: values.cardNumber,
@@ -96,8 +96,8 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
         expirationDate: values.expirationDate,
         plan: values.plan,
         price: plan.price,
-        users: plan.users,
-        connections: plan.connections,
+        // users: plan.users,
+        // connections: plan.connections,
         invoiceId: invoiceId
       }
 // console.log(newValues)
