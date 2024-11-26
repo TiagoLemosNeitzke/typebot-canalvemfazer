@@ -87,7 +87,6 @@ const SignUp = () => {
 	const [user] = useState(initialState);
 	const dueDate = moment().add(10, "day").format(); // Aqui dá o prazo de teste grátis
 	const handleSignUp = async values => {
-		console.log(values)
 		Object.assign(values, { recurrence: "MENSAL" });
 		Object.assign(values, { dueDate: dueDate });
 		Object.assign(values, { status: "t" });
@@ -97,7 +96,7 @@ const SignUp = () => {
 			toast.success(i18n.t("signup.toasts.success"));
 			history.push("/login");
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 			toastError(err);
 		}
 	};
