@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createCustomer, getCustomerInvoices, createCardToken, createSubscription } from "../services/AsaasService/CreateCustomer";
+
 import User from "../models/User";
 
 // @ts-ignore
@@ -17,7 +17,7 @@ export const handleSubscription = async (req: Request, res: Response): Promise<R
 
     if (!user.asaasCustomerId) {
       // Cria o cliente no Asaas
-      const customer = await createCustomer({
+      const customer = await customerService({
         name: user.name,
         email: user.email,
         phone: user.phone,
