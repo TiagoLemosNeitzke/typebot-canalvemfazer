@@ -8,7 +8,7 @@ const asaasApi = axios.create({
   },
 });
 
-export const customerService = async (data: any) => {
+export const createCustomer = async (data: any) => {
   const response = await asaasApi.post("/customers", data);
   return response.data;
 };
