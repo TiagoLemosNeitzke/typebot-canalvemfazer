@@ -12,6 +12,7 @@ import { getIO } from "../libs/socket";
 import UpdateUserService from "../services/UserServices/UpdateUserService";
 import axios from "axios";
 import assasConfig from "../config/asaas";
+import User from "../models/User";
 
 const app = express();
 
@@ -120,25 +121,47 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 export const createSubscription = async (req: Request, res: Response): Promise<Response> => {
 /*
 *  body: {
-    firstName: 'Tiago Lemos Neitzke',
-    lastName: '',
-    address2: 'Rua Otávio Barbosa Vilar',
-    city: 'Fatima do Sul',
-    state: 'MS',
-    zipcode: '79700000',
-    country: 'BR',
-    useAddressForPaymentDetails: false,
-    nameOnCard: '',
-    cardNumber: '4444444444444444',
-    cvv: '123',
-    expirationDate: '12/25',
-    plan: '{"title":"Plano 1","planId":1,"price":30,"description":["10 Usuários","10 Conexão","10 Filas"],"users":10,"connections":10,"queues":10,"buttonText":"SELECIONAR","buttonVariant":"outlined"}',
-    price: 30,
-    users: 10,
-    connections: 10,
-    invoiceId: 1
+  "userId": "3",
+  "cnpj': "13.582.601/0001-00",
+  "zipcode": "79700-000",
+  "useAddressForPaymentDetails": false,
+  "nameOnCard": "Joe Doe",
+  "cardNumber": "4444444444444444",
+  "cvv": "123",
+  "expirationDate": "12/29",
+  "plan": "{"title":"Plano 1","planId":1,"price":30,"description":["10 Usuários","10 Conexão","10 Filas"],"users":10,"connections":10,"queues":10,"buttonText":"SELECIONAR","buttonVariant":"outlined"}",
+  "price": "30",
+  "invoiceId": "7"
   },
 */
+  const dataFromRequest = req.body
+  let user = await User.findByPk(dataFromRequest.userId)
+
+  if(user.asaasCustomerId === null){
+    const customerData = {
+      name: user.name,
+      email: user.email,
+      cpfCnpj: dataFromRequest.cnpj,
+      mobilePhone: user.company.phone,
+      postalCode: dataFromRequest.zipcode,
+      externalReference: user.id.toString(),
+      notificationDisabled: false,
+    };
+
+    const response = await asaasApi.post("/customers", customerData);
+    user.asaasCustomerId = response.data.id;
+    await user.save();
+  }
+  console.log(user)
+
+
+
+
+
+
+
+
+
   const { companyId } = req.user;
   const data = req.body
 console.log(data)
