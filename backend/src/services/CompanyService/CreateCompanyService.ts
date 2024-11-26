@@ -94,7 +94,7 @@ const CreateCompanyService = async (
 
   //create assas id
   const asaasCustomer = await asaasService.createCustomer(data)
-  //todo: preciso verificar o que retorna
+  //todo: preciso verificar o que retorna, seria bom adicionar validação pelo menos no cnpj
 console.log(asaasCustomer)
   await Setting.findOrCreate({
     where: {
