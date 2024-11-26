@@ -6,10 +6,15 @@ export default {
       label: 'Nome completo*',
       requiredErrorMsg: 'O nome completo é obrigatório'
     },
-    lastName: {
-      name: 'lastName',
-      label: 'Last name*',
-      requiredErrorMsg: 'Last name is required'
+    phone: {
+      name: 'PhoneNumber',
+      label: 'Telefone de contato',
+      requiredErrorMsg: 'O campo é obrigatório'
+    },
+    cpfCnpj: {
+      name: 'CnpfCnpjNumber',
+      label: 'CPF/CNPJ',
+      requiredErrorMsg: 'O campo é obrigatório'
     },
     address1: {
       name: 'address2',

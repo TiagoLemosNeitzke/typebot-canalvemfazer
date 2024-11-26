@@ -57,13 +57,13 @@ export const update = async (
 export const me = async (req: Request, res: Response): Promise<Response> => {
   const token: string = req.cookies.jrt;
   const user = await FindUserFromToken(token);
-  const { id, asaasCustomerId, profile, super: superAdmin } = user;
+  const { id, asaasCustomerId, profile, super: superAdmin, name } = user;
 
   if (!token) {
     throw new AppError("ERR_SESSION_EXPIRED", 401);
   }
 
-  return res.json({ id, asaasCustomerId, profile, super: superAdmin });
+  return res.json({ id, asaasCustomerId, profile, super: superAdmin, name });
 };
 
 export const remove = async (
