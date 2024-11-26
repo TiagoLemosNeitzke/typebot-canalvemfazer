@@ -15,7 +15,7 @@ import {
   ForeignKey,
   BelongsTo
 } from "sequelize-typescript";
-import { hash, compare } from "bcryptjs";
+import {hash, compare} from "bcryptjs";
 import Ticket from "./Ticket";
 import Queue from "./Queue";
 import UserQueue from "./UserQueue";
@@ -61,6 +61,12 @@ class User extends Model<User> {
 
   @Column
   asaasCardToken: string;
+
+  @Column
+  cnpj: string;
+
+  @Column
+  zipcode: string;
 
   @CreatedAt
   createdAt: Date;
