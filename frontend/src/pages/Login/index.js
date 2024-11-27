@@ -14,27 +14,27 @@ import Container from "@material-ui/core/Container";
 import { i18n } from "../../translate/i18n";
 
 import { AuthContext } from "../../context/Auth/AuthContext";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo.svg";
 
 
 const Copyright = () => {
 	return (
-		<Typography variant="body2" color="primary" align="center">
-			{"Copyright "}
- 			<Link color="primary" href="#">
- 				PLW
- 			</Link>{" "}
- 			{new Date().getFullYear()}
- 			{"."}
- 		</Typography>
- 	);
- };
+		<Typography variant="body2" color="textSecondary" align="center">
+			{"Copyright © "}
+			<Link color="inherit" href="#">
+				Chattnes
+			</Link>{" "}
+			{new Date().getFullYear()}
+			{"."}
+		</Typography>
+	);
+};
 
 const useStyles = makeStyles(theme => ({
 	root: {
 		width: "100vw",
 		height: "100vh",
-		background: "linear-gradient(to right, #6D30EF , #6D30EF , #4C21A7)", //cor de fundo 
+		background: "#D7F5DC", //cor de fundo
 		//backgroundImage: "url(https://#)",
 		backgroundRepeat: "no-repeat",
 		backgroundSize: "100% 100%",
@@ -147,8 +147,7 @@ const Login = () => {
 				</form>
 			
 			</div>
-			
-			
+			<Box mt={4}><Copyright /></Box>
 		</Container>
 		</div>
 	);
