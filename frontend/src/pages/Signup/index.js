@@ -27,6 +27,7 @@ import {i18n} from "../../translate/i18n";
 import {openApi} from "../../services/api";
 import toastError from "../../errors/toastError";
 import moment from "moment";
+import InputMask from "react-input-mask"
 
 const Copyright = () => {
     return (
@@ -85,7 +86,7 @@ const UserSchema = Yup.object().shape({
         .required("Campo Obrigatório."),
     password: Yup.string().min(5, "Senha muito curta.").max(50, "Senha muito longa."),
     email: Yup.string().email("E-mail inválido.").required("Campo Obrigatório."),
-    cnpj: Yup.string().required("Campo Obrigatório."),
+    cnpj: Yup.string().min(14, "CNPJ inválido.").max(18, "CNPJ inválido.").required("Campo Obrigatório."),
     zipcode: Yup.string().min(8, "CEP Inválido.").max(9, "CEP Inválido.").required("Campo Obrigatório."),
     phone: Yup.string().required("Campo Obrigatório."),
 });
@@ -172,7 +173,6 @@ const SignUp = () => {
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        {/*todo preciso formatar os campos*/}
                                         <Field
                                             as={TextField}
                                             autoComplete="CNPJ"
@@ -184,8 +184,14 @@ const SignUp = () => {
                                             id="cnpj"
                                             label="CNPJ"
                                             required
-                                        >
-                                        </Field>
+                                            InputProps={{
+                                                inputComponent: InputMask,
+                                                inputProps: {
+                                                    mask: "99.999.999/9999-99",
+                                                    maskChar: null,
+                                                },
+                                            }}
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Field
@@ -199,6 +205,13 @@ const SignUp = () => {
                                             id="zipcode"
                                             label="CEP"
                                             required
+                                            InputProps={{
+                                                inputComponent: InputMask,
+                                                inputProps: {
+                                                    mask: "99999-999",
+                                                    maskChar: null,
+                                                },
+                                            }}
                                         >
                                         </Field>
                                     </Grid>
@@ -224,7 +237,6 @@ const SignUp = () => {
                                             fullWidth
                                             id="phone"
                                             label="Telefone com (DDD)"
-                                            placeholder="teste"
                                             name="phone"
                                             error={touched.phone && Boolean(errors.phone)}
                                             helperText={touched.phone && errors.phone}
