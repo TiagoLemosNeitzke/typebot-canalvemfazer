@@ -26,10 +26,12 @@ import formInitialValues from "./FormModel/formInitialValues";
 
 import useStyles from "./styles";
 import CreditCardForm from "./Forms/CreditCardForm";
+import ProductDetails from "./ReviewOrder/ProductDetails";
+import PaymentOptions from "./Forms/PaymentOptions";
 
 
 export default function CheckoutPage(props) {
-  const steps = ["Dados do assinante", "Dados de pagamento", "Dados do plano", "Revisar"];
+  const steps = ["Escolha como quer pagar", "Realize o pagamento"];
   const { formId, formField } = checkoutFormModel;
 
   const classes = useStyles();
@@ -45,7 +47,7 @@ function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
   console.log(step)
   switch (step) {
     case 0:
-      return <AddressForm formField={formField} values={values} setFieldValue={setFieldValue}  />;
+      return <PaymentOptions formField={formField} setFieldValue={setFieldValue} />;
     case 1:
       return (
           <CreditCardForm

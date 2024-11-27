@@ -4,7 +4,7 @@ const {
     formField: {
         // firstName,
         // address1,
-        cnpj,
+        // cnpj,
         // city,
         // state,
         // country,
@@ -21,7 +21,7 @@ export default {
     // [address1.name]: '',
     // [city.name]: '',
     // [state.name]: '',
-    [cnpj.name]: '',
+    // [cnpj.name]: '',
     // [country.name]: '',
     [useAddressForPaymentDetails.name]: false,
     [nameOnCard.name]: '',

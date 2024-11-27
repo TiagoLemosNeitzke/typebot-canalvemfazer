@@ -5,9 +5,9 @@ const {
     formField: {
         // firstName,
         // address1,
-        city,
-        zipcode,
-        cnpj,
+        // city,
+        // zipcode,
+        // cnpj,
         // country,
     }
 } = checkoutFormModel;
@@ -20,10 +20,10 @@ export default [
         /*[city.name]: Yup.string()
             .nullable()
             .required(`${city.requiredErrorMsg}`),*/
-        [zipcode.name]: Yup.string()
+       /* [zipcode.name]: Yup.string()
             .required(`${zipcode.requiredErrorMsg}`),
         [cnpj.name]: Yup.string()
-            .required(`${cnpj.requiredErrorMsg}`),
+            .required(`${cnpj.requiredErrorMsg}`),*/
         /*[country.name]: Yup.string()
             .nullable()
             .required(`${country.requiredErrorMsg}`)*/

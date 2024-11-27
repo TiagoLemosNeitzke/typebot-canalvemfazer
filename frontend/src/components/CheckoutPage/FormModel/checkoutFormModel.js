@@ -11,11 +11,16 @@ export default {
       label: 'Telefone de contato',
       requiredErrorMsg: 'O campo é obrigatório'
     },*/
-    cnpj: {
+    billingType:{
+      name: 'billingType',
+      label: 'Forma de pagamento*',
+      requiredErrorMsg: 'O campo é obrigatório'
+    },
+   /* cnpj: {
       name: 'cnpj',
       label: 'CNPJ*',
       requiredErrorMsg: 'O CNPJ é obrigatório'
-    },
+    },*/
    /* address1: {
       name: 'address2',
       label: 'Endereço*',
@@ -31,12 +36,12 @@ export default {
       label: 'Estado*',
       requiredErrorMsg: 'Cidade é obrigatória'
     },*/
-    zipcode: {
+   /* zipcode: {
       name: 'zipcode',
       label: 'CEP*',
       requiredErrorMsg: 'CEP é obrigatório',
       invalidErrorMsg: 'Formato de CEP inválido'
-    },
+    },*/
    /* country: {
       name: 'country',
       label: 'País*',
