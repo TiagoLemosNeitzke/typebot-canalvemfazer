@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import express from "express";
 import * as Yup from "yup";
 import Gerencianet from "gn-api-sdk-typescript";
@@ -8,7 +8,7 @@ import options from "../config/Gn";
 import Company from "../models/Company";
 import Invoices from "../models/Invoices";
 import Subscriptions from "../models/Subscriptions";
-import { getIO } from "../libs/socket";
+import {getIO} from "../libs/socket";
 import UpdateUserService from "../services/UserServices/UpdateUserService";
 import axios from "axios";
 import assasConfig from "../config/asaas";
@@ -119,31 +119,34 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
 
 /*Implementação asaas*/
 export const createSubscription = async (req: Request, res: Response): Promise<Response> => {
-/*
-*  body: {
-  "userId": "3",
-  "cnpj': "13.582.601/0001-00",
-  "zipcode": "79700-000",
-  "useAddressForPaymentDetails": false,
-  "nameOnCard": "Joe Doe",
-  "cardNumber": "4444444444444444",
-  "cvv": "123",
-  "expirationDate": "12/29",
-  "plan": "{"title":"Plano 1","planId":1,"price":30,"description":["10 Usuários","10 Conexão","10 Filas"],"users":10,"connections":10,"queues":10,"buttonText":"SELECIONAR","buttonVariant":"outlined"}",
-  "price": "30",
-  "invoiceId": "7"
-  },
-*/
-  const dataFromRequest = req.body
-  let user = await User.findByPk(dataFromRequest.userId)
+  /*
+  *  body: {
+    "userId": "3",
+    "cnpj': "13.582.601/0001-00",
+    "zipcode": "79700-000",
+    "useAddressForPaymentDetails": false,
+    "nameOnCard": "Joe Doe",
+    "cardNumber": "4444444444444444",
+    "cvv": "123",
+    "expirationDate": "12/29",
+    "plan": "{"title":"Plano 1","planId":1,"price":30,"description":["10 Usuários","10 Conexão","10 Filas"],"users":10,"connections":10,"queues":10,"buttonText":"SELECIONAR","buttonVariant":"outlined"}",
+    "price": "30",
+    "invoiceId": "7"
+    },
+  */
 
-  if(user.asaasCustomerId === null){
+  const user = await User.findByPk(req.body.userId)
+  const {companyId} = req.user;
+  const {customerId, price, plan, invoiceId} = req.body;
+  const invoice = await Invoices.findByPk(req.body.invoiceId)
+
+  if (user.asaasCustomerId === null) {
     const customerData = {
       name: user.name,
       email: user.email,
-      cpfCnpj: dataFromRequest.cnpj,
+      cpfCnpj: req.body.cnpj,
       mobilePhone: user.company.phone,
-      postalCode: dataFromRequest.zipcode,
+      postalCode: req.body.zipcode,
       externalReference: user.id.toString(),
       notificationDisabled: false,
     };
@@ -152,19 +155,7 @@ export const createSubscription = async (req: Request, res: Response): Promise<R
     user.asaasCustomerId = response.data.id;
     await user.save();
   }
-  console.log(user)
 
-
-
-
-
-
-
-
-
-  const { companyId } = req.user;
-  const data = req.body
-console.log(data)
   const schema = Yup.object().shape({
     price: Yup.string().required(),
     users: Yup.string().required(),
@@ -173,17 +164,15 @@ console.log(data)
   });
 
   if (!(await schema.isValid(req.body))) {
-    throw new AppError("Validation fails 123", 400);
+    throw new AppError("Validation fails", 400);
   }
-
-  const { customerId, price, plan } = req.body;
-
+/*todo: preciso verificar se esses dados estão sendo montados corretamente
+*  todo: verificar no endpoint do asaas se posso enviar mais alguma info*/
   const subscriptionData = {
-    customer: customerId,
-    billingType: "BOLETO", // ou PIX, depende do que você deseja usar
-    nextDueDate: new Date().toISOString().split("T")[0],
+    customer: user.asaasCustomerId ?? customerId,
+    billingType: req.body.billingType,
     value: parseFloat(price),
-    cycle: "MONTHLY",
+    dueDate: invoice.dueDate,
     description: `Assinatura do plano ${plan}`
   };
 
@@ -213,7 +202,7 @@ export const createWebhook = async (
     throw new AppError("Validation fails", 400);
   }
 
-  const { chave, url } = req.body;
+  const {chave, url} = req.body;
 
   const body = {
     webhookUrl: url
@@ -235,11 +224,11 @@ export const createWebhook = async (
 export const webhook = async (
   req: Request,
   res: Response
-  ): Promise<Response> => {
-  const { type } = req.params;
-  const { evento } = req.body;
+): Promise<Response> => {
+  const {type} = req.params;
+  const {evento} = req.body;
   if (evento === "teste_webhook") {
-    return res.json({ ok: true });
+    return res.json({ok: true});
   }
   if (req.body.pix) {
     const gerencianet = Gerencianet(options);
@@ -249,10 +238,10 @@ export const webhook = async (
       });
 
       if (detahe.status === "CONCLUIDA") {
-        const { solicitacaoPagador } = detahe;
+        const {solicitacaoPagador} = detahe;
         const invoiceID = solicitacaoPagador.replace("#Fatura:", "");
         const invoices = await Invoices.findByPk(invoiceID);
-        const companyId =invoices.companyId;
+        const companyId = invoices.companyId;
         const company = await Company.findByPk(companyId);
 
         const expiresAt = new Date(company.dueDate);
@@ -263,7 +252,7 @@ export const webhook = async (
           await company.update({
             dueDate: date
           });
-         const invoi = await invoices.update({
+          const invoi = await invoices.update({
             id: invoiceID,
             status: 'paid'
           });
@@ -286,5 +275,5 @@ export const webhook = async (
 
   }
 
-  return res.json({ ok: true });
+  return res.json({ok: true});
 };
