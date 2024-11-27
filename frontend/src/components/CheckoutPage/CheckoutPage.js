@@ -41,6 +41,7 @@ export default function CheckoutPage(props) {
   const { user } = useContext(AuthContext);
 
 function _renderStepContent(step, setFieldValue, setActiveStep, values ) {
+  /*todo: aqui eu preciso realizar a criação da cobrança lá no assas e mostrar o boleto ou o pix*/
   console.log(step)
   switch (step) {
     case 0:
