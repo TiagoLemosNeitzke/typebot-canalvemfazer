@@ -4,7 +4,7 @@ import assasConfig from '../../config/asaas'
 const asaasApi = axios.create({
   baseURL: assasConfig.asaas_url,
   headers: {
-    Authorization: `Bearer ${assasConfig.assas_api_key}`,
+    access_token: `${assasConfig.assas_api_key}`,
   },
 });
 
