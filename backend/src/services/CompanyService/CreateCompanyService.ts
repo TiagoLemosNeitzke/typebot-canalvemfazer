@@ -4,6 +4,7 @@ import Company from "../../models/Company";
 import User from "../../models/User";
 import Setting from "../../models/Setting";
 import * as asaasService from "../AsaasService/CustomerService";
+import {Sanitize} from "../../helpers/Sanitize";
 
 interface CompanyData {
   name: string;
@@ -46,7 +47,7 @@ const CreateCompanyService = async (
         async value => {
           if (value) {
             const companyWithSameName = await Company.findOne({
-              where: { name: value }
+              where: {name: value}
             });
 
             return !companyWithSameName;
@@ -57,7 +58,7 @@ const CreateCompanyService = async (
   });
 
   try {
-    await companySchema.validate({ name });
+    await companySchema.validate({name});
   } catch (err: any) {
     throw new AppError(err.message);
   }
@@ -72,7 +73,6 @@ const CreateCompanyService = async (
     recurrence
   });
 
-
   const user = await User.create({
     name: company.name,
     email: company.email,
@@ -83,19 +83,23 @@ const CreateCompanyService = async (
     companyId: company.id
   });
 
-  const data = {
-    name: company.name,
-    email: company.email,
-    mobilePhone: company.phone,
-    cpfCnpj: cnpj,
-    postalCode: zipcode,
-    externalReference: company.id,
-  };
+  try {
+    const data = {
+      name: company.name,
+      email: company.email,
+      mobilePhone: company.phone,
+      cpfCnpj: Sanitize(cnpj),
+      postalCode: Sanitize(zipcode),
+      externalReference: company.id,
+    };
 
-  //create assas id
-  const asaasCustomer = await asaasService.createCustomer(data)
-  //todo: preciso verificar o que retorna, seria bom adicionar validação pelo menos no cnpj
-console.log(asaasCustomer)
+    const asaasCustomer = await asaasService.createCustomer(data)
+
+    user.asaasCustomerId = asaasCustomer.id
+    user.save()
+  } catch (err: any) {
+    throw new AppError(err.message); //todo: preciso enviar isso para o discord de alguma maneira
+  }
   await Setting.findOrCreate({
     where: {
       companyId: company.id,
@@ -213,9 +217,9 @@ console.log(asaasCustomer)
   });
 
 
- // Enviar mensagem ao aceitar ticket
-    await Setting.findOrCreate({
-	where:{
+  // Enviar mensagem ao aceitar ticket
+  await Setting.findOrCreate({
+    where: {
       companyId: company.id,
       key: "sendGreetingAccepted",
     },
@@ -226,9 +230,9 @@ console.log(asaasCustomer)
     },
   });
 
- // Enviar mensagem de transferencia
-    await Setting.findOrCreate({
-	where:{
+  // Enviar mensagem de transferencia
+  await Setting.findOrCreate({
+    where: {
       companyId: company.id,
       key: "sendMsgTransfTicket",
     },
@@ -237,7 +241,7 @@ console.log(asaasCustomer)
       key: "sendMsgTransfTicket",
       value: "disabled"
     },
- });
+  });
 
   //userRating
   await Setting.findOrCreate({
@@ -316,7 +320,7 @@ console.log(asaasCustomer)
 
     });
     if (!created) {
-      await setting.update({ value: `${campaignsEnabled}` });
+      await setting.update({value: `${campaignsEnabled}`});
     }
   }
 
