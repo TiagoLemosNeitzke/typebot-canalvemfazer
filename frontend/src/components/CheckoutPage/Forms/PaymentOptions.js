@@ -17,7 +17,7 @@ export default function PaymentOptions(props) {
 
     return (
         <React.Fragment>
-            <Typography variant="h6" gutterBottom justifyContent="center" style={{ textAlign: "center" }}>
+            <Typography variant="h6" gutterBottom style={{ textAlign: "center" }}>
                 Selecione a forma de pagamento
             </Typography>
             <Grid container spacing={3} justifyContent="center">
